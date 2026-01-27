@@ -3,6 +3,7 @@ import { auth } from "@/auth"
 import { PrismaClient } from "@prisma/client"
 import { FleetDashboard } from "@/components/fleet-dashboard"
 import { handleSignOut } from "./actions"
+import { redirect } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { LogOut, User } from "lucide-react"
 import { DashboardExportButton } from "@/components/dashboard-export-button"
@@ -43,6 +44,9 @@ async function getVehicles(section?: string | null) {
 
 export default async function Home() {
   const session = await auth()
+  if (!session) {
+    redirect(getApiPath("/login"))
+  }
   const userSection = session?.user?.section;
   const vehicles = await getVehicles(userSection)
 
