@@ -1,0 +1,41 @@
+services:
+  web:
+    image: jaylaelove/vms-thaipbs-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    container_name: vms-thaipbs-prod
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:/app/prisma/dev.db
+    volumes:
+      # Persist SQLite database - mount to same path as in container
+      - ./prisma:/app/prisma:rw
+      # Persist uploaded files
+      - ./public/uploads:/app/public/uploads:rw
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+

@@ -1,0 +1,45 @@
+# Traefik Dynamic Configuration
+
+http:
+  middlewares:
+    # Security Headers
+    security-headers:
+      headers:
+        frameDeny: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+        
+    # Rate Limiting
+    rate-limit:
+      rateLimit:
+        average: 100
+        burst: 50
+        
+    # CORS (ถ้าต้องการ)
+    cors-headers:
+      headers:
+        accessControlAllowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+        accessControlAllowOriginList:
+          - "*"
+        accessControlMaxAge: 100
+        addVaryHeader: true
+    
+
+
+  routers:
+    vms-router:
+      rule: "PathPrefix(`/vms`) || PathPrefix(`/_next`) || PathPrefix(`/api/auth`) || Path(`/login`)"
+      service: "vms-service"
+
+      entryPoints:
+        - "web"
+
+  services:
+    vms-service:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:3000"

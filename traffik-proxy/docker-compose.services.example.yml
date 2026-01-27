@@ -1,0 +1,82 @@
+# ตัวอย่าง: วิธีเชื่อม services เข้ากับ Traefik
+# Copy file นี้และปรับแต่งตามต้องการ
+
+version: '3.8'
+
+services:
+  # Service 1: Next.js
+  nextjs-app:
+    image: your-nextjs-image:latest
+    container_name: nextjs-app
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      # HTTP
+      - "traefik.http.routers.nextjs.rule=Host(`nextjs.localhost`)"
+      - "traefik.http.routers.nextjs.entrypoints=web"
+      - "traefik.http.services.nextjs.loadbalancer.server.port=3000"
+      # Middlewares
+      - "traefik.http.routers.nextjs.middlewares=security-headers,rate-limit"
+
+  # Service 2: React (Vite)
+  react-app:
+    image: your-react-image:latest
+    container_name: react-app
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.react.rule=Host(`react.localhost`)"
+      - "traefik.http.routers.react.entrypoints=web"
+      - "traefik.http.services.react.loadbalancer.server.port=5173"
+
+  # Service 3: Node.js API
+  nodejs-api:
+    image: your-nodejs-image:latest
+    container_name: nodejs-api
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`api.localhost`)"
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.services.api.loadbalancer.server.port=3002"
+      - "traefik.http.routers.api.middlewares=security-headers,rate-limit,cors-headers"
+
+  # Service 4: NestJS API
+  nestjs-api:
+    image: your-nestjs-image:latest
+    container_name: nestjs-api
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nestjs.rule=Host(`nestjs.localhost`)"
+      - "traefik.http.routers.nestjs.entrypoints=web"
+      - "traefik.http.services.nestjs.loadbalancer.server.port=3003"
+
+  # Service 5: PostgREST
+  postgrest:
+    image: postgrest/postgrest:latest
+    container_name: postgrest
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    environment:
+      PGRST_DB_URI: postgres://user:pass@postgres:5432/dbname
+      PGRST_DB_SCHEMA: public
+      PGRST_DB_ANON_ROLE: web_anon
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.postgrest.rule=Host(`db.localhost`)"
+      - "traefik.http.routers.postgrest.entrypoints=web"
+      - "traefik.http.services.postgrest.loadbalancer.server.port=3000"
+
+networks:
+  traefik-network:
+    external: true

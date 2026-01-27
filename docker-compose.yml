@@ -1,0 +1,29 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    image: jaylaelove/vms-thaipbs-app:latest
+    container_name: vms-thaipbs-dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - AUTH_SECRET=${AUTH_SECRET:-h4hhGegacRFs1u550/f3mPmHN4W2nZJM6XHgqF3NjqU=}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-9e09e1696a0fd5bd6eddf1897a41d59188fce948341f40ce58741e60356c79f7}
+      - AUTH_TRUST_HOST=true
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost/vms}
+    volumes:
+      # Mount prisma directory to persist database
+      - ./prisma:/app/prisma
+      # Mount uploads directory to persist user uploads
+      - ./public/uploads:/app/public/uploads
+    healthcheck:
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
