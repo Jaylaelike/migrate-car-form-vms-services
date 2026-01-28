@@ -43,10 +43,24 @@ export async function updateTrip(formData: FormData) {
                 description: data.description,
                 mileageStart: data.mileageStart,
                 mileageEnd: data.mileageEnd,
+                totalDistance: (data.mileageEnd !== null && data.mileageEnd !== undefined)
+                    ? (data.mileageEnd - data.mileageStart)
+                    : null,
             },
         })
 
+        // Fetch vehicleId for revalidation
+        const trip = await prisma.trip.findUnique({
+            where: { id: data.tripId },
+            select: { vehicleId: true }
+        })
+
+        if (trip) {
+            revalidatePath(`/vehicles/${trip.vehicleId}`)
+        }
         revalidatePath(`/trips/${data.tripId}`)
+        revalidatePath("/")
+
         return { success: true }
     } catch (error) {
         console.error("Failed to update trip:", error)
