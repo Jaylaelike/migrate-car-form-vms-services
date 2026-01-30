@@ -12,6 +12,7 @@ import { formatDateThai } from "@/lib/format-utils"
 import { TripRow } from "@/components/trip-row"
 import { VehicleExportButton } from "@/components/vehicle-export-button"
 import { VehiclePastTripDialog } from "@/components/vehicle-past-trip-dialog"
+import CountUp from "@/components/count-up"
 
 // Force dynamic rendering to ensure fresh data
 export const dynamic = 'force-dynamic'
@@ -105,7 +106,7 @@ export default async function VehicleDetailPage({ params }: PageProps) {
                         <CardContent>
                             <div className="flex items-center text-2xl font-bold text-slate-900">
                                 <Gauge className="mr-2 h-5 w-5 text-slate-400" />
-                                {vehicle.currentOdometer.toLocaleString()}
+                                <CountUp to={vehicle.currentOdometer} separator="," duration={0.2} />
                             </div>
                         </CardContent>
                     </Card>
@@ -125,7 +126,7 @@ export default async function VehicleDetailPage({ params }: PageProps) {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold text-slate-900">
-                                {vehicle.trips.reduce((acc, t) => acc + (t.totalDistance || 0), 0).toLocaleString()} <span className="text-sm font-normal text-slate-500">km</span>
+                                <CountUp to={vehicle.trips.reduce((acc, t) => acc + (t.totalDistance || 0), 0)} separator="," duration={0.5} /> <span className="text-sm font-normal text-slate-500">km</span>
                             </div>
                         </CardContent>
                     </Card>

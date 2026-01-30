@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Info, CarFront, Lock } from "lucide-react"
+import TextType from "@/components/text-type"
 
 export default function LoginPage() {
     const [errorMessage, dispatch, isPending] = useActionState(authenticate, undefined)
@@ -23,11 +24,20 @@ export default function LoginPage() {
                         <div className="h-16 w-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30">
                             <CarFront className="h-10 w-10 text-white" />
                         </div>
-                        <h1 className="text-5xl font-bold tracking-tight text-white leading-tight">
-                            VMS <span className="text-blue-500">Application</span>
-                        </h1>
-                        <p className="text-lg text-slate-400 max-w-md">
-                            ระบบบริหารจัดการรถยนต์สำนักวิศวกรรม
+                        <div className="flex text-5xl font-bold tracking-tight text-white leading-tight gap-3">
+                            <TextType text={["VMS"]} cursorChar="" showCursor={false} loop={false} />
+                            <span className="text-blue-500">
+                                <TextType text={["Application"]} delay={0.5} cursorChar="" loop={false} />
+                            </span>
+                        </div>
+                        <p className="text-lg text-slate-400 max-w-md h-8">
+                            <TextType
+                                text={["ระบบบริหารจัดการรถยนต์สำนักวิศวกรรม", "Vehicle Management System", "Engineering Bureau"]}
+                                delay={1}
+                                duration={0.05}
+                                showCursor={true}
+                                loop={true}
+                            />
                         </p>
                     </div>
                 </div>

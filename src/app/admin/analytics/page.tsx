@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { format } from "date-fns"
 import { DateRange } from "react-day-picker"
 import { getApiPath } from "@/lib/utils"
+import CountUp from "@/components/count-up"
 
 type StatsData = {
     totalTrips: number
@@ -126,7 +127,9 @@ export default function AnalyticsPage() {
                         </div>
                         <div>
                             <p className="text-sm font-medium text-slate-500">Total Trips</p>
-                            <h3 className="text-2xl font-bold">{stats.totalTrips}</h3>
+                            <h3 className="text-2xl font-bold">
+                                <CountUp to={stats.totalTrips} separator="," />
+                            </h3>
                         </div>
                     </div>
                 </div>
@@ -137,7 +140,9 @@ export default function AnalyticsPage() {
                         </div>
                         <div>
                             <p className="text-sm font-medium text-slate-500">Total Distance</p>
-                            <h3 className="text-2xl font-bold">{stats.totalDistance.toLocaleString()} km</h3>
+                            <h3 className="text-2xl font-bold">
+                                <CountUp to={stats.totalDistance} separator="," /> <span className="text-base font-normal">km</span>
+                            </h3>
                         </div>
                     </div>
                 </div>
@@ -148,7 +153,9 @@ export default function AnalyticsPage() {
                         </div>
                         <div>
                             <p className="text-sm font-medium text-slate-500">Consumption Rate</p>
-                            <h3 className="text-2xl font-bold">{stats.oilConsumptionRate} km/L</h3>
+                            <h3 className="text-2xl font-bold">
+                                <CountUp to={parseFloat(stats.oilConsumptionRate)} separator="." /> <span className="text-base font-normal">km/L</span>
+                            </h3>
                         </div>
                     </div>
                 </div>
@@ -161,10 +168,10 @@ export default function AnalyticsPage() {
                             <p className="text-sm font-medium text-slate-500">Avg. Trips/Day</p>
                             {/* Simple approximation based on trends or total count / ranges */}
                             <h3 className="text-2xl font-bold">
-                                {stats.trendData.length > 0
-                                    ? (stats.totalTrips / stats.trendData.length).toFixed(1)
-                                    : "0"
-                                }
+                                <CountUp
+                                    to={stats.trendData.length > 0 ? (stats.totalTrips / stats.trendData.length) : 0}
+                                    separator="."
+                                />
                             </h3>
                         </div>
                     </div>

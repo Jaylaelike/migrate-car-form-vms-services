@@ -22,6 +22,7 @@ import { VehiclePastTripDialog } from "./vehicle-past-trip-dialog"
 import { formatDateThai } from "@/lib/format-utils"
 import { TripDetailsTabContent } from "./trip-details-tab-content"
 import { cn, getApiPath } from "@/lib/utils"
+import CountUp from "./count-up"
 
 interface Vehicle {
     id: number
@@ -57,15 +58,21 @@ export function FleetDashboard({ vehicles }: FleetDashboardProps) {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 flex-1 w-full">
                     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm">
                         <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">รถทั้งหมด</p>
-                        <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">{vehicles.length}</p>
+                        <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">
+                            <CountUp to={vehicles.length} separator="," />
+                        </p>
                     </div>
                     <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/50 p-4 rounded-xl shadow-sm">
                         <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">ว่าง</p>
-                        <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-500 mt-1">{availableCount}</p>
+                        <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-500 mt-1">
+                            <CountUp to={availableCount} separator="," />
+                        </p>
                     </div>
                     <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/50 p-4 rounded-xl shadow-sm">
                         <p className="text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider">ใช้งานอยู่</p>
-                        <p className="text-2xl font-bold text-blue-700 dark:text-blue-500 mt-1">{busyCount}</p>
+                        <p className="text-2xl font-bold text-blue-700 dark:text-blue-500 mt-1">
+                            <CountUp to={busyCount} separator="," />
+                        </p>
                     </div>
                 </div>
 
@@ -115,7 +122,7 @@ export function FleetDashboard({ vehicles }: FleetDashboardProps) {
                                         <p className="text-xs text-slate-400 font-medium">เลขไมล์ปัจจุบัน</p>
                                         <div className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200">
                                             <Gauge className="mr-1.5 h-4 w-4 text-slate-400" />
-                                            {vehicle.currentOdometer.toLocaleString()}
+                                            <CountUp to={vehicle.currentOdometer} separator="," />
                                         </div>
                                     </div>
                                     <div className="space-y-1">

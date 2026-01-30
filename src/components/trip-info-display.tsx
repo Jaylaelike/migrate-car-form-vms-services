@@ -14,6 +14,7 @@ import { CreateFuelLogDialog } from "@/components/create-fuel-log-dialog"
 // However, exact Prisma types are better for consistency.
 import { Prisma } from "@prisma/client"
 import { getApiPath } from "@/lib/utils"
+import CountUp from "./count-up"
 
 type TripWithDetails = Omit<Prisma.TripGetPayload<{
     include: {
@@ -117,23 +118,23 @@ export function TripInfoDisplay({ trip, onRefresh }: TripInfoDisplayProps) {
                         <div>
                             <p className="text-xs text-slate-400 font-medium uppercase">ระยะทางรวม</p>
                             <div className="text-xl font-bold text-slate-900">
-                                {trip.totalDistance ? trip.totalDistance.toLocaleString() : "-"} <span className="text-sm font-normal text-slate-500">km</span>
+                                {trip.totalDistance ? <CountUp to={trip.totalDistance} separator="," duration={0.5} /> : "-"} <span className="text-sm font-normal text-slate-500">km</span>
                             </div>
                         </div>
                         <div>
                             <p className="text-xs text-slate-400 font-medium uppercase">ระยะเวลา</p>
                             <div className="text-xl font-bold text-slate-900">
-                                {duration ? duration.toFixed(1) : "-"} <span className="text-sm font-normal text-slate-500">ชม.</span>
+                                {duration ? <CountUp to={duration} separator="." duration={0.5} /> : "-"} <span className="text-sm font-normal text-slate-500">ชม.</span>
                             </div>
                         </div>
                         <div className="col-span-2 pt-2 border-t border-dashed border-slate-100 dark:border-slate-800">
                             <div className="flex justify-between text-sm">
                                 <span className="text-slate-500">ไมล์เริ่มต้น:</span>
-                                <span className="font-mono">{trip.mileageStart.toLocaleString()}</span>
+                                <span className="font-mono"><CountUp to={trip.mileageStart} separator="," duration={0.5} /></span>
                             </div>
                             <div className="flex justify-between text-sm mt-1">
                                 <span className="text-slate-500">ไมล์สิ้นสุด:</span>
-                                <span className="font-mono">{trip.mileageEnd ? trip.mileageEnd.toLocaleString() : "-"}</span>
+                                <span className="font-mono">{trip.mileageEnd ? <CountUp to={trip.mileageEnd} separator="," duration={0.5} /> : "-"}</span>
                             </div>
                         </div>
                     </CardContent>
@@ -153,13 +154,13 @@ export function TripInfoDisplay({ trip, onRefresh }: TripInfoDisplayProps) {
                                 <div>
                                     <p className="text-xs text-orange-600/70 dark:text-orange-400/70 font-medium uppercase">รวมเป็นเงิน</p>
                                     <div className="text-lg font-bold text-orange-700 dark:text-orange-400">
-                                        {trip.fuelLogs.reduce((acc, log) => acc + Number(log.price), 0).toLocaleString()} <span className="text-sm font-normal">บาท</span>
+                                        <CountUp to={trip.fuelLogs.reduce((acc, log) => acc + Number(log.price), 0)} separator="," duration={0.5} /> <span className="text-sm font-normal">บาท</span>
                                     </div>
                                 </div>
                                 <div className="text-right">
                                     <p className="text-xs text-orange-600/70 dark:text-orange-400/70 font-medium uppercase">รวมจำนวนลิตร</p>
                                     <div className="text-lg font-bold text-orange-700 dark:text-orange-400">
-                                        {trip.fuelLogs.reduce((acc, log) => acc + Number(log.liter), 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 3 })} <span className="text-sm font-normal">ลิตร</span>
+                                        <CountUp to={trip.fuelLogs.reduce((acc, log) => acc + Number(log.liter), 0)} separator="," duration={0.5} /> <span className="text-sm font-normal">ลิตร</span>
                                     </div>
                                 </div>
                             </div>

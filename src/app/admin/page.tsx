@@ -4,6 +4,7 @@ import { Users, Car, Map, Fuel } from "lucide-react"
 import prisma from "@/lib/db"
 import { DatabaseManager } from "@/components/admin/database-manager"
 import { getApiPath } from "@/lib/utils"
+import CountUp from "@/components/count-up"
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic'
@@ -31,7 +32,9 @@ export default async function AdminDashboardPage() {
                         <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{userCount}</div>
+                        <div className="text-2xl font-bold">
+                            <CountUp to={userCount} separator="," />
+                        </div>
                     </CardContent>
                 </Card>
                 <Card>
@@ -40,7 +43,9 @@ export default async function AdminDashboardPage() {
                         <Car className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{vehicleCount}</div>
+                        <div className="text-2xl font-bold">
+                            <CountUp to={vehicleCount} separator="," />
+                        </div>
                     </CardContent>
                 </Card>
                 <Card>
@@ -49,7 +54,9 @@ export default async function AdminDashboardPage() {
                         <Map className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{tripCount}</div>
+                        <div className="text-2xl font-bold">
+                            <CountUp to={tripCount} separator="," />
+                        </div>
                     </CardContent>
                 </Card>
                 <Card>
@@ -58,7 +65,9 @@ export default async function AdminDashboardPage() {
                         <Car className="h-4 w-4 text-green-500" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-green-600">{ongoingTrips}</div>
+                        <div className="text-2xl font-bold text-green-600">
+                            <CountUp to={ongoingTrips} separator="," />
+                        </div>
                     </CardContent>
                 </Card>
             </div>
